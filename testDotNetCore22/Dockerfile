@@ -6,7 +6,7 @@ FROM microsoft/dotnet:2.2-sdk AS build
 WORKDIR /src
 COPY . .
 WORKDIR /src/testDotNetCore22
-RUN pwd && ls && dotnet build testDotNetCore22.csproj -c Release -o /app
+RUN  ls /src/ && ls / && dotnet build testDotNetCore22.csproj -c Release -o /app
 
 FROM build AS publish
 RUN dotnet publish testDotNetCore22.csproj -c Release -o /app
