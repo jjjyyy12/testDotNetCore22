@@ -5,8 +5,6 @@ EXPOSE 80
 FROM microsoft/dotnet:2.2-sdk AS build
 WORKDIR /src
 COPY . .
-WORKDIR /src/testDotNetCore22
-RUN  ls /src/
 RUN  dotnet build testDotNetCore22.csproj -c Release -o /app
 
 FROM build AS publish
