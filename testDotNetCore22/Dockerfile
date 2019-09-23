@@ -4,7 +4,7 @@ EXPOSE 80
 
 FROM microsoft/dotnet:2.2-sdk AS build
 WORKDIR /src
-COPY ./testDotNetCore22/ /src/testDotNetCore22/
+COPY testDotNetCore22/ /src/testDotNetCore22/
 RUN  ls /src/testDotNetCore22/
 COPY . .
 WORKDIR /src/testDotNetCore22
