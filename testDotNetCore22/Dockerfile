@@ -13,7 +13,7 @@ RUN dotnet publish testDotNetCore22.csproj -c Release -o /app
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app .
-ENV ASPNETCORE_URLS http://*:32081/
+ENV ASPNETCORE_URLS http://*:5000/
 ENV ASPNETCORE_ENVIRONMENT test
 ENV ASPNETCORE_PKG_VERSION 1.0.0
 ENTRYPOINT ["dotnet", "testDotNetCore22.dll"]
