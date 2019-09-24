@@ -16,8 +16,8 @@ imagePullSecrets: []
   # - name: myRegistryKeySecretName
 service:
   type: NodePort #ClusterIP
-  port: 32081
-
+  port: 80
+  nodeport: 32081
 probes:
   enabled: false
 

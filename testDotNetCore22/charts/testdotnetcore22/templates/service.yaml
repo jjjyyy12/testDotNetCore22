@@ -14,6 +14,7 @@ spec:
       targetPort: http
       protocol: TCP
       name: http
+      nodePort: {{ .Values.service.nodeport }}
   selector:
     app: {{ template "testdotnetcore22.name" . }}
     release: {{ .Release.Name }}
