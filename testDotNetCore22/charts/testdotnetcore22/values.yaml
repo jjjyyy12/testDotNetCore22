@@ -4,7 +4,7 @@
 fullnameOverride: testdotnetcore22
 replicaCount: 1
 image:
-  repository: testdotnetcore22
+  repository: registry.cn-hangzhou.aliyuncs.com/clare_dockerhub/testdotnetcore22
   tag: stable
   pullPolicy: IfNotPresent
 imagePullSecrets: []
