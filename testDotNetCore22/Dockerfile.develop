@@ -1,17 +1,19 @@
-FROM mcr.microsoft.com/dotnet/core/sdk:2.2
-ARG BUILD_CONFIGURATION=Debug
-ENV ASPNETCORE_ENVIRONMENT=Development
-ENV DOTNET_USE_POLLING_FILE_WATCHER=true
+FROM mcr.microsoft.com/dotnet/core/aspnet:2.2-stretch-slim AS base
+WORKDIR /app
 EXPOSE 5000
 
-WORKDIR /src
-COPY ["testDotNetCore22/testDotNetCore22.csproj", "testDotNetCore22/"]
-
-RUN dotnet restore "testDotNetCore22/testDotNetCore22.csproj"
+FROM mcr.microsoft.com/dotnet/core/sdk:2.2-stretch AS build
+WORKDIR /src 
 COPY . .
-WORKDIR "/src/testDotNetCore22"
-RUN dotnet build --no-restore "testDotNetCore22.csproj" -c $BUILD_CONFIGURATION
+RUN  dotnet build testDotNetCore22.csproj -c Release -o /app
 
-RUN echo "exec dotnet run --no-build --no-launch-profile -c $BUILD_CONFIGURATION --" > /entrypoint.sh
+FROM build AS publish
+RUN dotnet publish testDotNetCore22.csproj -c Release -o /app
 
-ENTRYPOINT ["/bin/bash", "/entrypoint.sh"]
+FROM base AS final
+WORKDIR /app
+COPY --from=publish /app .
+ENV ASPNETCORE_URLS http://*:5000/
+#ENV ASPNETCORE_ENVIRONMENT test
+#ENV ASPNETCORE_PKG_VERSION 1.0.0
+ENTRYPOINT ["dotnet", "testDotNetCore22.dll"]

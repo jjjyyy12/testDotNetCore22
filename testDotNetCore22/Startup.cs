@@ -15,6 +15,10 @@ namespace testDotNetCore22
     {
         public Startup(IConfiguration configuration)
         {
+            foreach (var i in configuration.GetChildren())
+            {
+                Console.WriteLine(i.Key + "_" + i.Value);
+            }
             Configuration = configuration;
         }
 
