@@ -24,15 +24,13 @@ namespace testDotNetCore22
             return WebHost.CreateDefaultBuilder(args)
                 .ConfigureAppConfiguration((context, builder) =>
             {
-                if (!string.IsNullOrWhiteSpace(HostingEnvironment))
+                var commonPath = AppContext.BaseDirectory + "/common";
+                var commonJsonFileName = "common.json";
+                var fullCommonJsonFilePath = commonPath + "/" + commonJsonFileName;
+                if (Directory.Exists(commonPath) && File.Exists(fullCommonJsonFilePath))
                 {
-                    builder.SetBasePath(AppContext.BaseDirectory)
-                    .AddJsonFile($"common.{HostingEnvironment}.json", optional: false, reloadOnChange: true);
-                }
-                else
-                {
-                    builder.SetBasePath(AppContext.BaseDirectory)
-                      .AddJsonFile($"common.json", optional: false, reloadOnChange: true);
+                    builder.SetBasePath(commonPath)
+      .AddJsonFile(commonJsonFileName, optional: false, reloadOnChange: true);
                 }
             })
                 .ConfigureAppConfiguration(LoadAppSettingsAndApollo)
