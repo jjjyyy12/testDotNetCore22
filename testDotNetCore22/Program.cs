@@ -18,16 +18,30 @@ namespace testDotNetCore22
         {
             CreateWebHostBuilder(args).Build().Run();
         }
-
+        private static string HostingEnvironment => Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
         public static IWebHostBuilder CreateWebHostBuilder(string[] args)
         {
             return WebHost.CreateDefaultBuilder(args)
+                .ConfigureAppConfiguration((context, builder) =>
+            {
+                if (!string.IsNullOrWhiteSpace(HostingEnvironment))
+                {
+                    builder.SetBasePath(AppContext.BaseDirectory)
+                    .AddJsonFile($"common.{HostingEnvironment}.json", optional: false, reloadOnChange: true);
+                }
+                else
+                {
+                    builder.SetBasePath(AppContext.BaseDirectory)
+                      .AddJsonFile($"common.json", optional: false, reloadOnChange: true);
+                }
+            })
                 .ConfigureAppConfiguration(LoadAppSettingsAndApollo)
                 .UseStartup<Startup>();
         }
         public static void LoadAppSettingsAndApollo(IConfigurationBuilder builder)
         {
-            var japx = builder.Build().GetSection("Japx");
+            var root = builder.Build();
+            var japx = root.GetSection("Japx");
             var appId = japx["AppId"];
             var metaServer = japx["Apollo.MetaServer"];
             var _outerConsulAddress = japx["OuterConsulAddress"];
@@ -37,7 +51,10 @@ namespace testDotNetCore22
                 ? int.Parse(currentPort)
                 : 80;
 
-            var apolloBuilder = builder
+            var publickey = root.GetValue<string>("japx.public.k");
+            if (string.IsNullOrWhiteSpace(publickey))
+            {
+                var apolloBuilder = builder
                 .AddApollo(new ApolloOptions { AppId = appId, MetaServer = metaServer })
                 .AddDefault()
                 .AddNamespace("japx.public")
@@ -50,9 +67,14 @@ namespace testDotNetCore22
                 .AddNamespace("japx.route")
                 .AddNamespace("japx.manage")
                 .AddNamespace("japx.RocketMq");
-            Console.WriteLine("ApolloMetaServer:" + metaServer);
+                Console.WriteLine("ApolloMetaServer:" + metaServer);
+            }
+                
             //Request03_ByGet(metaServer);
+
+
             var configuration = builder.Build();
+
 
             foreach (var i in configuration.GetChildren())
             {
