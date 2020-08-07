@@ -24,14 +24,7 @@ namespace testDotNetCore22
             return WebHost.CreateDefaultBuilder(args)
                 .ConfigureAppConfiguration((context, builder) =>
             {
-                var commonPath = AppContext.BaseDirectory + "/common";
-                var commonJsonFileName = "common.json";
-                var fullCommonJsonFilePath = commonPath + "/" + commonJsonFileName;
-                if (Directory.Exists(commonPath) && File.Exists(fullCommonJsonFilePath))
-                {
-                    builder.SetBasePath(commonPath)
-      .AddJsonFile(commonJsonFileName, optional: false, reloadOnChange: true);
-                }
+                
             })
                 .ConfigureAppConfiguration(LoadAppSettingsAndApollo)
                 .UseStartup<Startup>();
@@ -67,7 +60,14 @@ namespace testDotNetCore22
                 .AddNamespace("japx.RocketMq");
                 Console.WriteLine("ApolloMetaServer:" + metaServer);
             }
-                
+            var commonPath = AppContext.BaseDirectory + "/common";
+            var commonJsonFileName = "common.json";
+            var fullCommonJsonFilePath = commonPath + "/" + commonJsonFileName;
+            if (Directory.Exists(commonPath) && File.Exists(fullCommonJsonFilePath))
+            {
+                builder.SetBasePath(commonPath)
+  .AddJsonFile(commonJsonFileName, optional: false, reloadOnChange: true);
+            }
             //Request03_ByGet(metaServer);
 
 
