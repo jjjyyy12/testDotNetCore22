@@ -49,8 +49,8 @@ namespace testDotNetCore22
                 ? int.Parse(currentPort)
                 : 80;
 
-            var publickey = root.GetValue<string>("japx.public.k");
-            if (string.IsNullOrWhiteSpace(publickey))
+            //var publickey = root.GetValue<string>("japx.public.k");
+            //if (string.IsNullOrWhiteSpace(publickey))
             {
                 var apolloBuilder = builder
                 .AddApollo(new ApolloOptions { AppId = appId, MetaServer = metaServer })
