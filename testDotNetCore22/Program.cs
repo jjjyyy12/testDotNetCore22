@@ -65,8 +65,7 @@ namespace testDotNetCore22
             var fullCommonJsonFilePath = commonPath + "/" + commonJsonFileName;
             if (Directory.Exists(commonPath) && File.Exists(fullCommonJsonFilePath))
             {
-                builder.SetBasePath(commonPath)
-  .AddJsonFile(commonJsonFileName, optional: false, reloadOnChange: true);
+                builder.AddJsonFile(fullCommonJsonFilePath, optional: false, reloadOnChange: true);
             }
             //Request03_ByGet(metaServer);
 
